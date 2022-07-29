@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Web Technology</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h2>University of Wollongong</h2>
+    <div id="contain">
+        <table>
+            <form name="regForm" id="form" action="" method="GET">
+                <p class="success input-sucess"></p>
+                <tr id="rows">
+                    <td id="tableData"><label for="userName">Name:</label></td>
+                    <td><input type="text" id="userName" onkeyup="filter(this)" placeholder="No special characters" required></td>
+                    <script>
+                        function filter(input) {
+                            var hex = /[^a-z0-9]/gi;
+                            input.value = input.value.replace(hex, "");
+                        };
+                    </script>
+                    <td>
+                        <p class="name name-error">
+                        </p>
+                    </td>
+                </tr>
+                <tr id="rows">
+                    <td>
+                        <label for="moduleCode"> Module Code:</label>
+                    </td>
+                    <td>
+                        <input type="text" id="moduleCode" placeholder="abc1234" pattern="[a-z]{3}[0-9]{4}">
+                    </td>
+                    <td>
+                        <p class="module module-error"></p>
+                        <td>
+                </tr>
+                <tr id="rows">
+                    <td>
+                        <label for="currentTime"> Current date:
+                        </label>
+                    </td>
+                    <td>
+                        <p id="currentTime">
+                            <script>
+                                // var today = new Date(); // var dd = String(today.getDate()).padStart(2, '0'); // var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0! // var yyyy = today.getFullYear(); // today = dd + ' ' + mm + ' ' + yyyy; // document.write(today);
+                                var objToday = new Date(),
+                                    weekday = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'),
+                                    dayOfWeek = weekday[objToday.getDay()],
+                                    domEnder = function() {
+                                        var a = objToday;
+                                        if (/1/.test(parseInt((a +
+                                                "").charAt(0)))) return "th";
+                                        a = parseInt((a + "").charAt(1));
+                                        return 1 == a ? "" : 2 == a ? "" : 3 == a ? "" : ""
+                                    }(),
+                                    dayOfMonth = today + (objToday.getDate() <
+                                        10) ? '0' + objToday.getDate() + domEnder : objToday.getDate() + domEnder,
+                                    months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'),
+                                    curMonth = months[objToday.getMonth()],
+                                    curYear = objToday.getFullYear(),
+                                    curHour = objToday.getHours() > 12 ? objToday.getHours() - 12 : (objToday.getHours() <
+                                        10 ? "0" + objToday.getHours() : objToday.getHours()),
+                                    curMinute = objToday.getMinutes() < 10 ? "0" + objToday.getMinutes() : objToday.getMinutes(),
+                                    curMeridiem = objToday.getHours() > 12 ? "PM" : "AM";
+                                var today = dayOfMonth + " " + curMonth + " " + curYear + " " + dayOfWeek + " " + curHour + ":" + curMinute + " " + curMeridiem;
+                                document.getElementById('currentTime').textContent = today;
+                            </script>
+                    </td>
+                </tr>
+                <td>
+                    <label for="message"> Message:
+                        </label>
+                </td>
+                <td>
+                    <textarea id="textArea" rows=" 3 " cols=" 20 " required> “Hello 202204 "
+                        </textarea>
+                    </br>
+
+                    <td>
+                        <p id="replaced">
+                            <script>
+                            </script>
+                        </p>
+                    </td>
+                    </tr>
+                    <tr id="rows">
+                        <td><label for="findWord ">Find:</label></td>
+                        <td><input type="text" id="findWord" onkeyup="success()" />
+                            </br>
+                            <p id="findError" style="color: red;"></p>
+                        </td>
+                        <script>
+                            function success() {
+                                if (document.getElementById("findWord").value === "") {
+                                    document.getElementById('replaceWord').disabled = true;
+                                } else {
+                                    document.getElementById('replaceWord').disabled = false;
+                                }
+                            }
+                        </script>
+                    </tr>
+                    <tr id="rows">
+                        <td><label for="replaceWord ">Replace:</label></td>
+                        <td><input type="text" id="replaceWord" disabled /> </br>
+                            <p id="repError" style="color: red;"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <script>
+                                function findReplace() {
+                                    document.getElementById("findError").innerHTML = "";
+                                    document.getElementById("repError").innerHTML = "";
+
+                                    var findWordTxt = document.getElementById("findWord").value;
+                                    var replaceWordTxt = document.getElementById("replaceWord").value;
+
+                                    if (findWordTxt == "" && replaceWordTxt == "") {
+
+                                        if (findWordTxt == "") {
+                                            document.getElementById("findError").textContent += "Fill Find Field";
+                                        }
+
+                                        if (replaceWordTxt == "") {
+                                            document.getElementById("repError").textContent += "Fill Replace Field";
+                                        }
+
+                                    } else {
+                                        var wordTxt = document.getElementById("textArea").value;
+                                        var findWordTxt = document.getElementById("findWord").value;
+                                        var replaceWordTxt = document.getElementById("replaceWord").value;
+
+                                        var textOccurence = (wordTxt.split(findWordTxt)).length - 1;
+                                        document.getElementById("textOccurence").innerHTML = "";
+                                        document.getElementById("textOccurence").textContent += textOccurence;
+
+                                        let result = wordTxt.replace(new RegExp(findWordTxt, 'g'), replaceWordTxt);
+
+                                        document.getElementById("textArea").value = result;
+
+                                    }
+
+                                }
+                            </script>
+                            <button type="button" onclick="findReplace()">Find and Replace <p id="textOccurence"></p>
+                            </button>
+                        </td>
+                        <td>
+                            <p id=" replacedWords "></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <script>
+                            function translateWords() {
+                                var translateText = document.getElementById("textArea");
+                                var translateBtn = document.getElementById('translateBtn');
+                                var translateFrom = document.getElementById('sourceLanguage').value.trim();
+                                var radioButtons = document.querySelectorAll('input[name="target_lang"]');
+                                var translateTo = "";
+
+                                for (const radioButton of radioButtons) {
+                                    if (radioButton.checked) {
+                                        translateTo = radioButton.value.trim();
+                                        break;
+                                    }
+                                }
+
+                                let text = translateText.value.trim();
+                                console.log(text)
+                                if (!text) return;
+                                let apiUrl = `https://api.mymemory.translated.net/get?q=${text}&langpair=${translateFrom}|${translateTo}`;
+                                fetch(apiUrl).then(res => res.json()).then(data => {
+                                    document.getElementById("translatedText").innerHTML = "";
+                                    document.getElementById("translatedText").textContent += data.responseData.translatedText;
+
+
+                                    // toText.value = data.responseData.translatedText;
+                                    data.matches.forEach(data => {
+                                        if (data.id === 0) {
+                                            document.getElementById("translatedText").innerHTML = "";
+                                            document.getElementById("translatedText").textContent += data.translation;
+                                        }
+                                    });
+                                    // toText.setAttribute("placeholder", "Translation");
+                                });
+                            }
+                        </script>
+
+                        <td><label for="sourceLanguage ">
+                            Source Language:
+                        </label>
+                        </td>
+                        <td><select name="language " id="sourceLanguage">
+                            <option value="en-GB ">English</option>
+                            <option value="ms-MY ">Malay</option>
+                            <option value="ja-JP ">Japanese</option>
+                            <option value="ko-KR ">Korean</option>
+                        </select>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <!-- <td>
+                            <script>
+                                function beforeTranslate() {
+
+                                    var originalText = document.getElementById("textArea");
+                                    var translateFrom = document.getElementById('sourceLanguage').value.trim();
+                                }
+                            </script>
+                            <textarea name="" id="untranslatedText" cols="30" rows="2" hidden></textarea>
+                        </td> -->
+                    </tr>
+                    <tr>
+                        <td><label for="targetLanguage ">
+                            Target Language:
+                        </label>
+                        </td>
+                        <td><input checked type="radio" id="Japanese " name="target_lang" value="ja-JP">
+                            <label for="Japanese ">Japanese</label>
+                            <input type="radio" id="English " name="target_lang" value="en-GB">
+                            <label for="English ">English</label>
+                            <input type="radio" id="Chinese " name="target_lang" value="zh-CN">
+                            <label for="Chinese ">Chinese</label>
+                            <input type="radio" id="Malay " name="target_lang" value="ms-MY">
+                            <label for="javascript ">Malay</label>
+                            <input type="radio" id="Korean " name="target_lang" value="ko-KR">
+                            <label for="javascript">Korean</label>
+                        </td>
+                    </tr>
+                    <!-- <tr>
+                        <td><label for="beforeTranslate">Selected Source Language:</label></td>
+                        <td>
+
+                            <p id="untranslatedText"></p>
+                        </td>
+                    </tr> -->
+                    <tr>
+                        <td><label for="translatedText">Translated Text:</label></td>
+                        <td>
+                            <p id="translatedText"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="button" onclick="translateWords()">Translate</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <script>
+                            function cleanForm() {
+                                document.getElementById(" translatedText ").innerHTML = " ";
+                            }
+                        </script>
+                        <td><button type="reset " onclick="cleanForm() ">Reset</button></td>
+                    </tr>
+            </form>
+        </table>
+    </div>
+
+    <script type="text/javascript ">
+        $(document).ready(function() {
+            displayMoment();
+        });
+    </script>
+</body>
+
+</html>
